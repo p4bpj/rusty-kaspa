@@ -29,7 +29,7 @@ default = ["wasm32-sdk"]
 # default = []
 
 [lib]
-crate-type = ["cdylib", "lib"]
+crate-type = ["cdylib", "lib", "staticlib"]
 
 [dependencies]
 aes.workspace = true
@@ -102,6 +102,8 @@ workflow-wasm.workspace = true
 xxhash-rust.workspace = true
 zeroize.workspace = true
 indexed_db_futures.workspace = true
+uniffi = { version = "0.28", features = ["cli"]}
+hex = "0.4"
 
 [dependencies.web-sys]
 workspace = true
@@ -128,3 +130,7 @@ tokio.workspace = true
 
 [lints]
 workspace = true
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "uniffi-bindgen.rs"

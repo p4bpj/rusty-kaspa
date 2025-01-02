@@ -1,0 +1,4 @@
+[bindings.swift]
+#module_name = "kaspawalletcore"
+ffi_module_name = "kaspa_wallet_core"
+ffi_module_filename = "kaspawalletcoreFFI"

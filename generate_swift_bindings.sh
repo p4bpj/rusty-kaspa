@@ -1,0 +1,1 @@
+cargo run --bin uniffi-bindgen generate --library target/debug/libkaspa_wallet_core.so --out-dir uniffi-bindings/swift/ --language swift

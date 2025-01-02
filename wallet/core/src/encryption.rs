@@ -205,6 +205,7 @@ impl Encrypted {
 
 /// Produces `SHA256` hash of the given data.
 #[inline]
+//#[uniffi::export]
 pub fn sha256_hash(data: &[u8]) -> Secret {
     let mut sha256 = Sha256::default();
     sha256.update(data);
@@ -213,6 +214,7 @@ pub fn sha256_hash(data: &[u8]) -> Secret {
 
 /// Produces `SHA256d` hash of the given data.
 #[inline]
+//#[uniffi::export]
 pub fn sha256d_hash(data: &[u8]) -> Secret {
     let mut sha256 = Sha256::default();
     sha256.update(data);
@@ -227,7 +229,13 @@ pub fn argon2_sha256iv_hash(data: &[u8], byte_length: usize) -> Result<Secret> {
     Ok(key.into())
 }
 
+//#[uniffi::export]
+pub fn argon2_sha256iv_hash_u32(data: &[u8], byte_length: u32) -> Result<Secret> {
+    argon2_sha256iv_hash(data, byte_length as usize)
+}
+
 /// Encrypts the given data using `XChaCha20Poly1305` algorithm.
+//#[uniffi::export]
 pub fn encrypt_xchacha20poly1305(data: &[u8], secret: &Secret) -> Result<Vec<u8>> {
     let private_key_bytes = argon2_sha256iv_hash(secret.as_ref(), 32)?;
     let key = Key::from_slice(private_key_bytes.as_ref());
@@ -241,6 +249,7 @@ pub fn encrypt_xchacha20poly1305(data: &[u8], secret: &Secret) -> Result<Vec<u8>
 }
 
 /// Decrypts the given data using `XChaCha20Poly1305` algorithm.
+//#[uniffi::export]
 pub fn decrypt_xchacha20poly1305(data: &[u8], secret: &Secret) -> Result<Secret> {
     let private_key_bytes = argon2_sha256iv_hash(secret.as_ref(), 32)?;
     let key = Key::from_slice(private_key_bytes.as_ref());

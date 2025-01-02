@@ -20,7 +20,8 @@ use workflow_wasm::jserror::*;
 use workflow_wasm::printable::*;
 
 /// [`Error`](enum@Error) variants emitted by the wallet framework.
-#[derive(Debug, Error)]
+#[derive(Debug, Error, uniffi::Error)]
+#[uniffi(flat_error)]
 pub enum Error {
     #[error("{0}")]
     Custom(String),

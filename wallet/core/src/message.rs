@@ -4,9 +4,9 @@
 
 use kaspa_hashes::{Hash, PersonalMessageSigningHash};
 use secp256k1::{Error, XOnlyPublicKey};
+use hex;
 
 /// A personal message (text) that can be signed.
-#[derive(Clone)]
 pub struct PersonalMessage<'a>(pub &'a str);
 
 impl AsRef<[u8]> for PersonalMessage<'_> {
@@ -15,7 +15,7 @@ impl AsRef<[u8]> for PersonalMessage<'_> {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, uniffi::Object)]
 pub struct SignMessageOptions {
     /// The auxiliary randomness exists only to mitigate specific kinds of power analysis
     /// side-channel attacks. Providing it definitely improves security, but omitting it
@@ -41,6 +41,17 @@ pub fn sign_message(msg: &PersonalMessage, privkey: &[u8; 32], options: &SignMes
     Ok(sig.to_vec())
 }
 
+#[uniffi::export]
+pub fn sign_message_string(msg: String, privkey: &[u8], options: &SignMessageOptions) -> Result<Vec<u8>, crate::error::Error> {
+    if privkey.len() != 32 {
+        return Err(crate::error::Error::Custom("InvalidPrivateKey".to_string()));
+    }
+
+    let privkey_array: &[u8; 32] = privkey.try_into().map_err(|_| crate::error::Error::Custom("InvalidPrivateKey".to_string()))?;
+
+    sign_message(&PersonalMessage(msg.as_str()), privkey_array, options).map_err(|e| crate::error::Error::Custom(format!("Sign message failed: {}", e)))
+}
+
 /// Verifies signed message.
 ///
 /// Produces `Ok(())` if the signature matches the given message and [`secp256k1::Error`]
@@ -51,6 +62,19 @@ pub fn verify_message(msg: &PersonalMessage, signature: &Vec<u8>, pubkey: &XOnly
     let msg = secp256k1::Message::from_digest_slice(hash.as_bytes().as_slice())?;
     let sig = secp256k1::schnorr::Signature::from_slice(signature.as_slice())?;
     sig.verify(&msg, pubkey)
+}
+
+#[uniffi::export]
+pub fn verify_message_string(msg: String, signature: &Vec<u8>, pubkey: String) -> Result<(), crate::error::Error> {
+
+    // Hex-String des öffentlichen Schlüssels in Bytes umwandeln
+    let pubkey_bytes = hex::decode(pubkey).map_err(|_| crate::error::Error::Custom("Invalid public key format".to_string()))?;
+    
+    // Den XOnlyPublicKey aus den Bytes erzeugen
+    let pubkey_secp = XOnlyPublicKey::from_slice(&pubkey_bytes).map_err(|e| crate::error::Error::Custom(format!("Failed to create XOnlyPublicKey: {}", e)).to_string())?;
+    
+    // Die Verifizierung durchführen
+    verify_message(&PersonalMessage(msg.as_str()), signature, &pubkey_secp).map_err(|e| crate::error::Error::Custom(format!("Verify message failed: {}", e)))
 }
 
 fn calc_personal_message_hash(msg: &PersonalMessage) -> Hash {

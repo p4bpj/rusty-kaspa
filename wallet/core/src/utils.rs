@@ -30,25 +30,30 @@ pub fn try_kaspa_str_to_sompi_i64<S: Into<String>>(s: S) -> Result<Option<i64>> 
     Ok(Some(amount as i64))
 }
 
+#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa(sompi: u64) -> f64 {
     sompi as f64 / SOMPI_PER_KASPA as f64
 }
 
+#[uniffi::export]
 #[inline]
 pub fn kaspa_to_sompi(kaspa: f64) -> u64 {
     (kaspa * SOMPI_PER_KASPA as f64) as u64
 }
 
+#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string(sompi: u64) -> String {
     sompi_to_kaspa(sompi).separated_string()
 }
 
+#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string_with_trailing_zeroes(sompi: u64) -> String {
     separated_float!(format!("{:.8}", sompi_to_kaspa(sompi)))
 }
+
 
 pub fn kaspa_suffix(network_type: &NetworkType) -> &'static str {
     match network_type {
@@ -59,6 +64,7 @@ pub fn kaspa_suffix(network_type: &NetworkType) -> &'static str {
     }
 }
 
+//#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string_with_suffix(sompi: u64, network_type: &NetworkType) -> String {
     let kas = sompi_to_kaspa_string(sompi);
@@ -66,6 +72,7 @@ pub fn sompi_to_kaspa_string_with_suffix(sompi: u64, network_type: &NetworkType)
     format!("{kas} {suffix}")
 }
 
+//#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string_with_trailing_zeroes_and_suffix(sompi: u64, network_type: &NetworkType) -> String {
     let kas = sompi_to_kaspa_string_with_trailing_zeroes(sompi);

@@ -96,8 +96,12 @@ pub mod utils;
 pub mod utxo;
 pub mod wallet;
 
+pub mod ffi;
+
 #[cfg(any(feature = "wasm32-sdk", feature = "wasm32-core"))]
 pub mod wasm;
+
+uniffi::setup_scaffolding!();
 
 /// Returns the version of the Wallet framework.
 pub fn version() -> String {
