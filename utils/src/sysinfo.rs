@@ -78,18 +78,27 @@ impl Default for SystemInfo {
 impl SystemInfo {
     /// Obtain a unique system (machine) identifier.
     fn try_system_id() -> Option<Vec<u8>> {
-        let some_id = if let Ok(mut file) = File::open("/etc/machine-id") {
-            // fetch the system id from /etc/machine-id
-            let mut machine_id = String::new();
-            file.read_to_string(&mut machine_id).ok();
-            machine_id.trim().to_string()
-        } else if let Ok(Some(mac)) = mac_address::get_mac_address() {
-            // fallback on the mac address
-            mac.to_string().trim().to_string()
-        } else {
-            // 🤷
-            return None;
-        };
+let some_id = if let Ok(mut file) = File::open("/etc/machine-id") {
+    // fetch the system id from /etc/machine-id
+    let mut machine_id = String::new();
+    file.read_to_string(&mut machine_id).ok();
+    machine_id.trim().to_string()
+} else {
+    #[cfg(not(target_os = "ios"))]
+    if let Ok(Some(mac)) = mac_address::get_mac_address() {
+        // fallback on the mac address
+        mac.to_string().trim().to_string()
+    } else {
+        // 🤷
+        return None;
+    }
+    
+    #[cfg(target_os = "ios")]
+    {
+        // Für iOS passiert hier nichts, oder du kannst etwas anderes tun
+        return None;
+    }
+};
         let mut sha256 = Sha256::default();
         sha256.update(some_id.as_bytes());
         Some(sha256.finalize().to_vec())
