@@ -20,3 +20,5 @@ pub mod secret;
 pub mod types;
 pub mod xprv;
 pub mod xpub;
+
+uniffi::setup_scaffolding!();

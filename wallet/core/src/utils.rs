@@ -19,6 +19,7 @@ pub fn try_kaspa_str_to_sompi<S: Into<String>>(s: S) -> Result<Option<u64>> {
     Ok(Some(str_to_sompi(amount)?))
 }
 
+
 pub fn try_kaspa_str_to_sompi_i64<S: Into<String>>(s: S) -> Result<Option<i64>> {
     let s: String = s.into();
     let amount = s.trim();
@@ -64,7 +65,7 @@ pub fn kaspa_suffix(network_type: &NetworkType) -> &'static str {
     }
 }
 
-//#[uniffi::export]
+#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string_with_suffix(sompi: u64, network_type: &NetworkType) -> String {
     let kas = sompi_to_kaspa_string(sompi);
@@ -72,7 +73,7 @@ pub fn sompi_to_kaspa_string_with_suffix(sompi: u64, network_type: &NetworkType)
     format!("{kas} {suffix}")
 }
 
-//#[uniffi::export]
+#[uniffi::export]
 #[inline]
 pub fn sompi_to_kaspa_string_with_trailing_zeroes_and_suffix(sompi: u64, network_type: &NetworkType) -> String {
     let kas = sompi_to_kaspa_string_with_trailing_zeroes(sompi);

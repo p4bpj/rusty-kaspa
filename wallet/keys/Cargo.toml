@@ -42,6 +42,7 @@ wasm-bindgen.workspace = true
 workflow-core.workspace = true
 workflow-wasm.workspace = true
 zeroize.workspace = true
+uniffi = {version="0.28"}
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 tokio.workspace = true

@@ -44,6 +44,7 @@ workflow-core.workspace = true
 workflow-log.workspace = true
 workflow-serializer.workspace = true
 workflow-wasm.workspace = true
+uniffi = {version = "0.28"}
 
 [dev-dependencies]
 criterion.workspace = true

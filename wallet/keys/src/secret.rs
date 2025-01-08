@@ -5,7 +5,7 @@
 use crate::imports::*;
 
 /// Secret container for sensitive data. Performs memory erasure (zeroization) on drop.
-#[derive(Clone, Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
+#[derive(Clone, Serialize, Deserialize, BorshSerialize, BorshDeserialize, uniffi::Object)]
 pub struct Secret(Vec<u8>);
 
 impl Secret {
@@ -24,7 +24,9 @@ impl AsRef<[u8]> for Secret {
     }
 }
 
+#[uniffi::export]
 impl From<Vec<u8>> for Secret {
+    #[uniffi::constructor]
     fn from(vec: Vec<u8>) -> Self {
         Secret(vec)
     }

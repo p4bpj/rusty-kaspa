@@ -11,12 +11,12 @@ use kaspa_consensus_core::network;
 ///
 /// @category Wallet SDK
 ///
-//#[derive(uniffi::Object)]
+#[derive(uniffi::Object)]
 pub struct Balance {
     inner: native::Balance,
 }
 
-//#[uniffi::export]
+#[uniffi::export]
 impl Balance {
     /// Confirmed amount of funds available for spending.
     pub fn mature(&self) -> u64 {
@@ -51,12 +51,12 @@ impl From<native::Balance> for Balance {
 ///
 /// @category Wallet SDK
 ///
-//#[derive(uniffi::Object)]
+#[derive(uniffi::Object)]
 pub struct BalanceStrings {
     inner: native::BalanceStrings,
 }
 
-//#[uniffi::export]
+#[uniffi::export]
 impl BalanceStrings {
     pub fn mature(&self) -> String {
         self.inner.mature.clone()

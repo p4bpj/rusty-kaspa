@@ -28,7 +28,7 @@ pub enum NetworkTypeError {
 }
 
 /// @category Consensus
-#[derive(Clone, Copy, Debug, Serialize, Deserialize, BorshSerialize, BorshDeserialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, BorshSerialize, BorshDeserialize, PartialEq, Eq, Hash, Ord, PartialOrd, uniffi::Enum)]
 #[serde(rename_all = "lowercase")]
 #[wasm_bindgen]
 pub enum NetworkType {

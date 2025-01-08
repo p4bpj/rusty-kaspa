@@ -205,7 +205,7 @@ impl Encrypted {
 
 /// Produces `SHA256` hash of the given data.
 #[inline]
-//#[uniffi::export]
+#[uniffi::export]
 pub fn sha256_hash(data: &[u8]) -> Secret {
     let mut sha256 = Sha256::default();
     sha256.update(data);
@@ -214,7 +214,7 @@ pub fn sha256_hash(data: &[u8]) -> Secret {
 
 /// Produces `SHA256d` hash of the given data.
 #[inline]
-//#[uniffi::export]
+#[uniffi::export]
 pub fn sha256d_hash(data: &[u8]) -> Secret {
     let mut sha256 = Sha256::default();
     sha256.update(data);
