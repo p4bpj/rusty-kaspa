@@ -15,3 +15,5 @@ Servers.toml
 release
 package-sizes.js
 /uniffi-bindings/
+swift-package-ios/.build/
+swift-package-ios/.swiftpm
