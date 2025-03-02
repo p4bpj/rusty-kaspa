@@ -105,6 +105,9 @@ async fn export_single_key_account(ctx: Arc<KaspaCli>, account: Arc<dyn Account>
 
     let prv_key_data = keydata.payload.decrypt(payment_secret.as_ref())?;
     let mnemonic = prv_key_data.as_ref().as_mnemonic()?;
+    let payment_secret_ref = payment_secret.as_ref(); // Lebensdauer verlängern
+    let xprv = prv_key_data.as_ref().get_xprv(payment_secret_ref)?;
+    let secret_key = xprv.private_key();
 
     let xpub_key = keydata.create_xpub(None, BIP32_ACCOUNT_KIND.into(), 0).await?; // todo it can be done concurrently
 
@@ -122,6 +125,10 @@ async fn export_single_key_account(ctx: Arc<KaspaCli>, account: Arc<dyn Account>
             tprintln!(ctx, "");
             tprintln!(ctx, "{}", mnemonic.phrase());
             tprintln!(ctx, "");
+            tprintln!(ctx, "private-key for rothschild:");
+            tprintln!(ctx, "");
+            tprintln!(ctx, "{}", secret_key.display_secret());
+            tprintln!(ctx, "");
         }
         Some(mnemonic) => {
             tpara!(
@@ -135,6 +142,10 @@ async fn export_single_key_account(ctx: Arc<KaspaCli>, account: Arc<dyn Account>
             tprintln!(ctx, "mnemonic:");
             tprintln!(ctx, "");
             tprintln!(ctx, "{}", mnemonic.phrase());
+            tprintln!(ctx, "");
+            tprintln!(ctx, "private-key for rothschild:");
+            tprintln!(ctx, "");
+            tprintln!(ctx, "{}", secret_key.display_secret());
             tprintln!(ctx, "");
         }
     };
